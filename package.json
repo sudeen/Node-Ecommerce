@@ -1,0 +1,22 @@
+{
+  "name": "node-ecommerce",
+  "version": "1.0.0",
+  "description": "Node js Ecommerce App with mongo db",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sudeen/Node-Ecommerce.git"
+  },
+  "author": "Sudin Ranjitkar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sudeen/Node-Ecommerce/issues"
+  },
+  "homepage": "https://github.com/sudeen/Node-Ecommerce#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
