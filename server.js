@@ -2,12 +2,20 @@ var express = require('express');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
+var ejs = require('ejs');
+var ejsMate = require('ejs-mate');
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
+var flash = require('express-flash');
+var MongoStore = require('connect-mongo')(session);
+var passport = require('passport');
 
+var secret = require('./config/secret');
 var User = require('./models/user');
 
 var app = express();
 
-mongoose.connect('mongodb://root:abc123@ds115434.mlab.com:15434/ecommerce', function (err) {
+mongoose.connect(secret.database, function (err) {
     if (err) {
         console.log(err);
     }
@@ -18,25 +26,31 @@ mongoose.connect('mongodb://root:abc123@ds115434.mlab.com:15434/ecommerce', func
 })
 
 //Middleware
+app.use(express.static(__dirname + '/public'));
 app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true}));
+app.use(cookieParser());
+app.use(session({
+    resave: true,
+    saveUninitialized: true,
+    secret: secret.secretKey,
+    store: new MongoStore({ url:secret.database , autoReconnect: true})
+}));
+app.use(flash());
 
-app.post('/create-user', function(req, res, next){
-    var user = new User();
-    user.profile.name = req.body.name;
-    user.password = req.body.password;
-    user.email = req.body.email;
+/* app.engine is simply saying what kind of engine you wanna use */
+app.engine('ejs', ejsMate);
+app.set('view engine', 'ejs');
 
-    user.save(function(err){
-        if(err) next(err);
+var mainRoutes = require('./routes/main');
+var userRoutes = require('./routes/user');
 
-        res.json('Successfully created new user');
+app.use(mainRoutes);
+app.use(userRoutes);
 
-    });
-}); 
 
-app.listen(9000, function (err) {
+app.listen(secret.port, function (err) {
     if (err) throw err;
-    console.log("Server is Running on port 9000");
+    console.log("Server is Running on port " +secret.port);
 });
