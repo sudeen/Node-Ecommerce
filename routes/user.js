@@ -1,5 +1,6 @@
 var router = require('express').Router();
 var User = require('../models/user');
+var Cart = require('../models/cart');
 var async = require('async');
 var passport = require('passport');
 var passportConf = require('../config/passport');
