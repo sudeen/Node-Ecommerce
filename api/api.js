@@ -5,6 +5,13 @@ var Category = require('../models/category');
 var Product = require('../models/product');
 
 
+router.post('/search', function(req, res, next){
+    Product.search({
+        query_string: {query: req.body.search_term}
+    })
+})
+
+
 router.get('/:name', function (req, res, next) {
     async.waterfall([
         function (callback) {
