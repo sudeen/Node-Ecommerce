@@ -3,12 +3,14 @@ var bcrypt = require('bcrypt-nodejs');
 var crypto = require('crypto');
 var Schema = mongoose.Schema;
 
-
 /* The user schema attributes / characteristics / fields */
 var UserSchema = new Schema({
 
   email: { type: String, unique: true, lowercase: true},
   password: String,
+
+  facebook: String,
+  tokens: Array,
 
   profile: {
     name: { type: String, default: ''},
@@ -17,7 +19,6 @@ var UserSchema = new Schema({
 
   address: String,
   history: [{
-    date: Date,
     paid: { type: Number, default: 0},
     item: { type: Schema.Types.ObjectId, ref: 'Product'}
   }]
